@@ -63,6 +63,8 @@ from database import (
     get_messages,
     update_run,
     append_message,
+    get_setting,
+    set_setting,
 )
 from claude_agent_sdk import (
     query,
@@ -390,15 +392,30 @@ class AgentRunnerApp(App):
     async def on_mount(self) -> None:
         log.info("app started  scan_dir=%s  log=%s", self._scan_dir, _LOG_PATH)
         self.register_theme(DRACULA_THEME)
-        self.theme = "dracula"
         await init_db()
+        await self._setup_table()
+        await self._refresh_agents()
+        saved_theme = await get_setting("theme", default="dracula")
+        self.theme = saved_theme
+        log.info("theme loaded: %s", saved_theme)
+
+    async def watch_theme(self, theme: str) -> None:
+        """Persist theme changes so they survive restarts."""
+        try:
+            await set_setting("theme", theme)
+            log.info("theme saved: %s", theme)
+        except Exception:
+            pass  # DB may not be ready on the very first call
+
+    # ── Init (continued) ───────────────────────────────────────────────────────
+
+    async def _setup_table(self) -> None:
         table = self.query_one("#runs-table", DataTable)
         table.add_column("#",        key="num",      width=4)
         table.add_column("Status",   key="status",   width=14)
         table.add_column("Time",     key="time",     width=8)
         table.add_column("Duration", key="duration", width=9)
         table.add_column("Tokens",   key="tokens",   width=8)
-        await self._refresh_agents()
 
     # ── Data helpers ───────────────────────────────────────────────────────────
 

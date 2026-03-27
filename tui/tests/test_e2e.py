@@ -347,3 +347,38 @@ async def test_key_q_quits(app):
     async with app.run_test() as pilot:
         await pilot.press("q")
         # App should exit cleanly (run_test context exits without error)
+
+
+# ── Theme persistence ──────────────────────────────────────────────────────────
+
+@pytest.mark.asyncio
+async def test_default_theme_is_dracula(app):
+    async with app.run_test() as pilot:
+        await pilot.pause()
+        assert pilot.app.theme == "dracula"
+
+
+@pytest.mark.asyncio
+async def test_theme_change_is_persisted(app):
+    async with app.run_test() as pilot:
+        await pilot.pause()
+        pilot.app.theme = "textual-dark"
+        await pilot.pause()
+        await pilot.pause()
+        saved = await db_module.get_setting("theme")
+        assert saved == "textual-dark"
+
+
+@pytest.mark.asyncio
+async def test_theme_restored_on_restart(tmp_path, monkeypatch):
+    monkeypatch.setattr(db_module, "DB_PATH", str(tmp_path / "theme_restart.db"))
+    await db_module.init_db()
+    await db_module.set_setting("theme", "nord")
+
+    app_instance = AgentRunnerApp(scan_dir=str(tmp_path))
+    async with app_instance.run_test() as pilot:
+        for _ in range(10):
+            await pilot.pause()
+            if pilot.app.theme == "nord":
+                break
+        assert pilot.app.theme == "nord"

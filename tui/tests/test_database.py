@@ -30,6 +30,7 @@ async def test_init_db_creates_tables():
     assert "agent_definitions" in tables
     assert "agent_runs" in tables
     assert "run_messages" in tables
+    assert "settings" in tables
 
 
 async def test_init_db_idempotent():
@@ -263,3 +264,32 @@ async def test_message_content_roundtrip():
     await db_module.append_message(r["id"], 0, "result", content)
     msgs = await db_module.get_messages(r["id"])
     assert msgs[0]["content"] == content
+
+
+# ── settings ───────────────────────────────────────────────────────────────────
+
+async def test_get_setting_default_when_missing():
+    await db_module.init_db()
+    assert await db_module.get_setting("theme") == ""
+    assert await db_module.get_setting("theme", default="dracula") == "dracula"
+
+
+async def test_set_and_get_setting():
+    await db_module.init_db()
+    await db_module.set_setting("theme", "dracula")
+    assert await db_module.get_setting("theme") == "dracula"
+
+
+async def test_set_setting_overwrites():
+    await db_module.init_db()
+    await db_module.set_setting("theme", "nord")
+    await db_module.set_setting("theme", "dracula")
+    assert await db_module.get_setting("theme") == "dracula"
+
+
+async def test_set_setting_multiple_keys():
+    await db_module.init_db()
+    await db_module.set_setting("theme", "dracula")
+    await db_module.set_setting("scan_dir", "/some/path")
+    assert await db_module.get_setting("theme") == "dracula"
+    assert await db_module.get_setting("scan_dir") == "/some/path"

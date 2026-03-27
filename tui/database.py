@@ -53,6 +53,35 @@ async def init_db() -> None:
                 created_at TEXT NOT NULL
             )
         """)
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS settings (
+                key        TEXT PRIMARY KEY,
+                value      TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            )
+        """)
+        await db.commit()
+
+
+async def get_setting(key: str, default: str = "") -> str:
+    """Return the value for a settings key, or default if not set."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute("SELECT value FROM settings WHERE key = ?", (key,)) as cursor:
+            row = await cursor.fetchone()
+    return row[0] if row else default
+
+
+async def set_setting(key: str, value: str) -> None:
+    """Upsert a settings key/value pair."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO settings (key, value, updated_at)
+            VALUES (?, ?, ?)
+            ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at
+            """,
+            (key, value, _now()),
+        )
         await db.commit()
 
 
