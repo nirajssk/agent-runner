@@ -27,6 +27,7 @@ log = logging.getLogger("agent_runner")
 
 from textual import on, work
 from textual.app import App, ComposeResult
+from textual.theme import Theme
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, ScrollableContainer
 from textual.coordinate import Coordinate
@@ -74,6 +75,24 @@ from claude_agent_sdk import (
 from discovery import scan_agents
 
 DEFAULT_SCAN_DIR = r"C:\src\Teams-Graph"
+
+# ── Dracula theme ──────────────────────────────────────────────────────────────
+
+DRACULA_THEME = Theme(
+    name="dracula",
+    dark=True,
+    primary="#bd93f9",    # purple  — buttons, focus rings, highlights
+    secondary="#8be9fd",  # cyan    — secondary accents
+    accent="#50fa7b",     # green   — success / active
+    warning="#ffb86c",    # orange
+    error="#ff5555",      # red
+    success="#50fa7b",    # green
+    background="#282a36", # main bg
+    surface="#21222c",    # panel bg
+    panel="#191a21",      # dark bars (header, footer, toolbar)
+    foreground="#f8f8f2", # default text
+    boost="#44475a",      # subtle borders / zebra rows
+)
 
 
 # ── Custom Messages ────────────────────────────────────────────────────────────
@@ -370,6 +389,8 @@ class AgentRunnerApp(App):
 
     async def on_mount(self) -> None:
         log.info("app started  scan_dir=%s  log=%s", self._scan_dir, _LOG_PATH)
+        self.register_theme(DRACULA_THEME)
+        self.theme = "dracula"
         await init_db()
         table = self.query_one("#runs-table", DataTable)
         table.add_column("#",        key="num",      width=4)
