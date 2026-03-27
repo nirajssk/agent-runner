@@ -1,0 +1,5 @@
+textual
+aiosqlite
+claude-agent-sdk
+pytest
+pytest-asyncio

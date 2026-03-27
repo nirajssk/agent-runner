@@ -1,0 +1,180 @@
+/* ══════════════════════════════════════════════════════
+   Claude Agent Runner — Dracula theme
+   bg #282a36  surface #21222c  dark #191a21  pit #0d0e13
+   comment #6272a4  subtle #44475a
+   purple #bd93f9  cyan #8be9fd  green #50fa7b
+   orange #ffb86c  red #ff5555  fg #f8f8f2
+   ══════════════════════════════════════════════════════ */
+
+/* ── App shell ─────────────────────────────────────────── */
+Screen {
+    layout: horizontal;
+    background: #282a36;
+    color: #f8f8f2;
+}
+
+Header {
+    background: #191a21;
+    color: #bd93f9;
+    text-style: bold;
+}
+
+Footer {
+    background: #191a21;
+    color: #6272a4;
+}
+
+/* ── Panels ────────────────────────────────────────────── */
+#agents-panel {
+    width: 32;
+    layout: vertical;
+    background: #21222c;
+    border-right: solid #44475a;
+}
+
+#runs-panel {
+    width: 1fr;
+    layout: vertical;
+    background: #21222c;
+    border-right: solid #44475a;
+}
+
+#stream-panel {
+    width: 2fr;
+    layout: vertical;
+    background: #0d0e13;
+}
+
+/* ── Panel title bars ─────────────────────────────────── */
+.panel-title {
+    background: #191a21;
+    text-style: bold;
+    padding: 0 1;
+    height: 1;
+    width: 100%;
+    border-bottom: solid #44475a;
+}
+
+#agents-title { color: #bd93f9; }
+#runs-title   { color: #8be9fd; }
+#stream-title { color: #50fa7b; }
+
+/* ── Content widgets ──────────────────────────────────── */
+#agents-list {
+    height: 1fr;
+    background: #21222c;
+}
+
+#runs-table {
+    height: 1fr;
+    background: #21222c;
+}
+
+#stream-log {
+    height: 1fr;
+    background: #0d0e13;
+    color: #f8f8f2;
+}
+
+/* ── Toolbars ─────────────────────────────────────────── */
+.toolbar {
+    height: 3;
+    padding: 0 1;
+    background: #191a21;
+    align: left middle;
+    border-top: solid #44475a;
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+Button {
+    height: 1;
+    min-width: 10;
+    margin-right: 1;
+    background: #44475a;
+    color: #f8f8f2;
+    border: none;
+}
+
+Button:hover           { background: #6272a4; color: #f8f8f2; }
+Button.-primary        { background: #bd93f9; color: #282a36; }
+Button.-primary:hover  { background: #caa9fa; color: #282a36; }
+Button.-success        { background: #21222c; color: #50fa7b; }
+Button.-success:hover  { background: #50fa7b; color: #282a36; }
+Button.warning         { background: #21222c; color: #ff5555; }
+Button.warning:hover   { background: #ff5555; color: #f8f8f2; }
+
+/* ── DataTable ────────────────────────────────────────── */
+DataTable {
+    background: #21222c;
+    color: #f8f8f2;
+}
+
+DataTable > .datatable--header {
+    background: #191a21;
+    color: #bd93f9;
+    text-style: bold;
+}
+
+DataTable > .datatable--cursor {
+    background: #44475a;
+    color: #f8f8f2;
+}
+
+DataTable > .datatable--even-row { background: #1e1f29; }
+DataTable > .datatable--hover    { background: #383a4a; }
+
+/* ── ListView / ListItem ──────────────────────────────── */
+ListView { background: #21222c; }
+ListItem { background: #21222c; padding: 0 1; }
+ListItem:hover         { background: #383a4a; }
+ListItem.-selected     { background: #44475a; }
+ListItem.-highlighted  { background: #44475a; }
+
+/* ── NewAgentScreen modal ─────────────────────────────── */
+NewAgentScreen {
+    align: center middle;
+    background: #282a3699;
+}
+
+#dialog {
+    background: #21222c;
+    border: round #bd93f9;
+    padding: 1 2;
+    width: 70;
+    height: auto;
+    max-height: 90%;
+}
+
+#dialog-title      { text-style: bold; margin-bottom: 1; color: #bd93f9; }
+#agent-prompt      { height: 8; margin-bottom: 1; }
+.field-label       { color: #6272a4; margin-top: 1; }
+#tools-row         { height: auto; }
+#bottom-row        { margin-top: 1; height: 3; }
+#turns-input       { width: 6; }
+#perm-select       { width: 20; }
+.dialog-buttons    { align: right middle; }
+
+/* ── ScanAgentsScreen modal ───────────────────────────── */
+ScanAgentsScreen {
+    align: center middle;
+    background: #282a3699;
+}
+
+#scan-dialog {
+    background: #21222c;
+    border: round #bd93f9;
+    padding: 1 2;
+    width: 80;
+    height: auto;
+    max-height: 90%;
+}
+
+#scan-title        { text-style: bold; color: #bd93f9; margin-bottom: 1; }
+#scan-dir-label    { color: #6272a4; margin-bottom: 1; }
+#scan-list         { height: auto; max-height: 30; overflow-y: auto; }
+.scan-item         { border-bottom: solid #44475a; padding: 0 0 1 0; margin-bottom: 1; }
+.scan-item-name    { text-style: bold; color: #f8f8f2; }
+.scan-item-file    { color: #6272a4; }
+.scan-item-prompt  { color: #f8f8f2; }
+#scan-buttons      { margin-top: 1; align: right middle; }
+#scan-empty        { color: #6272a4; padding: 1 0; }
